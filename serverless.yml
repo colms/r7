@@ -45,24 +45,35 @@ functions:
       - http:
           path: /tasks
           method: get
+          cors: true
+  updateTask:
+    handler: com.serverless.UpdateTaskHandler
+    events:
+      - http:
+          path: /tasks
+          method: put
+          cors: true
   getTask:
     handler: com.serverless.GetTaskHandler
     events:
       - http:
           path: /tasks/{id}
           method: get
+          cors: true
   createTask:
     handler: com.serverless.CreateTaskHandler
     events:
       - http:
           path: /tasks
           method: post
+          cors: true
   deleteTask:
     handler: com.serverless.DeleteTaskHandler
     events:
       - http:
           path: /tasks/{id}
           method: delete
+          cors: true
 
 resources:
   Resources:
