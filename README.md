@@ -1,74 +1,18 @@
 # Serverless REST API in Java/Maven using DynamoDB
 
-
 ![image](https://user-images.githubusercontent.com/8188/38645675-ec708d0e-3db2-11e8-8f8b-a4a37ed612b9.png)
 
+The sample serverless service will create a REST API for tasks. It will be deployed to AWS. The data will be stored in a DynamoDB table. This is based on the blog post [REST API in Java using DynamoDB and Serverless](https://serverless.com/blog/how-to-create-a-rest-api-in-java-using-dynamodb-and-serverless/) and its [code](https://github.com/rupakg/aws-java-products-api).
 
-The sample serverless service will create a REST API for tasks. It will be deployed to AWS. The data will be stored in a DynamoDB table.
-
-This is a companion app for the blog post [REST API in Java using DynamoDB and Serverless](https://serverless.com/blog/how-to-create-a-rest-api-in-java-using-dynamodb-and-serverless/).
-
-## Install Pre-requisites
-
-* `node` and `npm`
-* Install the JDK and NOT the Java JRE from [Oracle JDK](http://www.oracle.com/technetwork/java/javase/downloads/index.html). And set the following:
-`export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-10.jdk/Contents/Home`
-* [Apache Maven](https://maven.apache.org/). After [downloading](https://maven.apache.org/download.html) and [installing](https://maven.apache.org/install.html) Apache Maven, please add the `apache-maven-x.x.x` folder to the `PATH` environment variable.
-
-### Test Pre-requisites
-
-Test Java installation:
-
-```
-$ java --version
-
-java 10 2018-03-20
-Java(TM) SE Runtime Environment 18.3 (build 10+46)
-Java HotSpot(TM) 64-Bit Server VM 18.3 (build 10+46, mixed mode)
-```
-
-Test Maven installation:
-
-```
-$ mvn -v
-
-Apache Maven 3.5.3 (3383c37e1f9e9b3bc3df5050c29c8aff9f295297; 2018-02-24T14:49:05-05:00)
-Maven home: /usr/local/apache-maven-3.5.3
-Java version: 10, vendor: Oracle Corporation
-Java home: /Library/Java/JavaVirtualMachines/jdk-10.jdk/Contents/Home
-Default locale: en_US, platform encoding: UTF-8
-OS name: "mac os x", version: "10.13.3", arch: "x86_64", family: "mac"
-```
+A frontend for this can be found [here](https://github.com/colms/r7react).
 
 ## Build the Java project
 
 Create the java artifact (jar) by:
 
 ```
-$ cd aws-java-tasks-api
+$ cd r7
 $ mvn clean install
-
-[INFO] Scanning for projects...
-[INFO]
-[INFO] --------------------< com.serverless:tasks-api >---------------------
-[INFO] Building tasks-api dev
-[INFO] --------------------------------[ jar ]---------------------------------
-[INFO]
-[INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ tasks-api ---
-[INFO] Deleting /Users/rupakg/projects/svrless/apps/aws-java-tasks-api/target
-
-...
-...
-
-[INFO] --- maven-install-plugin:2.4:install (default-install) @ tasks-api ---
-[INFO] Installing /Users/rupakg/projects/svrless/apps/aws-java-tasks-api/target/tasks-api-dev.jar to /Users/rupakg/.m2/repository/com/serverless/tasks-api/dev/tasks-api-dev.jar
-[INFO] Installing /Users/rupakg/projects/svrless/apps/aws-java-tasks-api/pom.xml to /Users/rupakg/.m2/repository/com/serverless/tasks-api/dev/tasks-api-dev.pom
-[INFO] ------------------------------------------------------------------------
-[INFO] BUILD SUCCESS
-[INFO] ------------------------------------------------------------------------
-[INFO] Total time: 2.790 s
-[INFO] Finished at: 2018-04-08T19:58:15-04:00
-[INFO] ------------------------------------------------------------------------
 ```
 
 We can see that we have an artifact in the `target` folder named `tasks-api-dev.jar`.
@@ -111,14 +55,14 @@ functions:
 
 ## Test the API
 
-Let's invoke each of the four functions that we created as part of the app.
+Here's how to use the API.
 
 ### Create Task
 
 ```
-$ curl -X POST https://xxxxxxxxxx.execute-api.us-east-1.amazonaws.com/dev/tasks -d '{"name": "Task1", "price": 9.99}'
+$ curl -X POST https://xxxxxxxxxx.execute-api.us-east-1.amazonaws.com/dev/tasks -d '{"description": "Task1"'}
 
-{"id":"ba04f16b-f346-4b54-9884-957c3dff8c0d","name":"Task1","price":9.99}
+{"id":"f42772e0-2fe2-4791-80c2-00fe436cf68f","description":"Task1","timestamp":1554493536939,"status":0}
 ```
 
 ### List Tasks
@@ -126,11 +70,14 @@ $ curl -X POST https://xxxxxxxxxx.execute-api.us-east-1.amazonaws.com/dev/tasks 
 ```
 $ curl https://xxxxxxxxxx.execute-api.us-east-1.amazonaws.com/dev/tasks
 
-[{"id":"dfe41235-0fe5-4e6f-9a9a-19b7b7ee79eb","name":"Task3","price":7.49},
-{"id":"ba04f16b-f346-4b54-9884-957c3dff8c0d","name":"Task1","price":9.99},
-{"id":"6db3efe0-f45c-4c5f-a73c-541a4857ae1d","name":"Task4","price":2.69},
-{"id":"370015f8-a8b9-4498-bfe8-f005dbbb501f","name":"Task2","price":5.99},
-{"id":"cb097196-d659-4ba5-b6b3-ead4c07a8428","name":"Task5","price":15.49}]
+[
+  {"id":"437bc12a-d412-4ce1-aa7f-5781695f9c0f","description":"a","timestamp":1554491918223,"status":1},
+  {"id":"06ec5d59-8233-4ba1-af36-b90876430633","description":"b","timestamp":1554491996423,"status":1},
+  {"id":"b2d6258b-c124-437d-97e9-c53e2cc4bdd5","description":"d","timestamp":1554492307758,"status":1},
+  {"id":"a655a5c6-73b2-4177-b7af-91935f7eec50","description":"f","timestamp":1554492515302,"status":1},
+  {"id":"45dd77d3-0dcb-46c0-943f-49cce3c9b835","description":"c","timestamp":1554492260782,"status":0},
+  {"id":"a4a44efe-4575-49f3-ade4-26b6c13ae6fc","description":"e","timestamp":1554492394062,"status":1}
+]
 ```
 
 **No Task(s) Found:**
@@ -144,9 +91,9 @@ $ curl https://xxxxxxxxxx.execute-api.us-east-1.amazonaws.com/dev/tasks
 ### Get Task
 
 ```
-$ curl https://xxxxxxxxxx.execute-api.us-east-1.amazonaws.com/dev/tasks/ba04f16b-f346-4b54-9884-957c3dff8c0d
+$ curl https://xxxxxxxxxx.execute-api.us-east-1.amazonaws.com/dev/tasks/f42772e0-2fe2-4791-80c2-00fe436cf68f
 
-{"id":"ba04f16b-f346-4b54-9884-957c3dff8c0d","name":"Task1","price":9.99}
+{"id":"f42772e0-2fe2-4791-80c2-00fe436cf68f","description":"Task1","timestamp":1554493536939,"status":0}
 ```
 
 **Task Not Found:**
@@ -171,30 +118,20 @@ curl -X DELETE https://xxxxxxxxxx.execute-api.us-east-1.amazonaws.com/dev/tasks/
 "Task with id: 'xxxx' not found."
 ```
 
+### UpdateTask
+
+Update the status of this task:
+
+```
+curl -X PUT https://yh1vcbxakj.execute-api.us-east-1.amazonaws.com/dev/tasks -d '{"id":"f42772e0-2fe2-4791-80c2-00fe436cf68f", "description":"Task1", "status":1}'
+
+{"id":"f42772e0-2fe2-4791-80c2-00fe436cf68f","description":"Task1","timestamp":1554494232127,"status":1}
+```
+
 ## View the CloudWatch Logs
 
 ```
 $ serverless logs --function getTask
-
-START RequestId: 34f45684-3dd0-11e8-bf8a-7f961671b2de Version: $LATEST
-...
-
-2018-04-11 21:35:14 <34f45684-3dd0-11e8-bf8a-7f961671b2de> DEBUG org.apache.http.wire:86 - http-outgoing-0 >> "{"TableName":"java-tasks-dev","ConsistentRead":true,"ScanIndexForward":true,"KeyConditionExpression":"id = :v1","ExpressionAttributeValues":{":v1":{"S":"6f1dfeb9-ea08-4161-8877-f6cc724b39e3"}}}"
-
-...
-
-2018-04-11 21:35:14 <34f45684-3dd0-11e8-bf8a-7f961671b2de> DEBUG org.apache.http.wire:86 - http-outgoing-0 << "{"Count":1,"Items":[{"price":{"N":"9.99"},"id":{"S":"6f1dfeb9-ea08-4161-8877-f6cc724b39e3"},"name":{"S":"Task1"}}],"ScannedCount":1}"
-
-...
-
-2018-04-11 21:35:14 <34f45684-3dd0-11e8-bf8a-7f961671b2de> DEBUG org.apache.http.impl.conn.PoolingHttpClientConnectionManager:314 - Connection [id: 0][route: {s}->https://dynamodb.us-east-1.amazonaws.com:443] can be kept alive for 60.0 seconds
-2018-04-11 21:35:14 <34f45684-3dd0-11e8-bf8a-7f961671b2de> DEBUG org.apache.http.impl.conn.PoolingHttpClientConnectionManager:320 - Connection released: [id: 0][route: {s}->https://dynamodb.us-east-1.amazonaws.com:443][total kept alive: 1; route allocated: 1 of 50; total allocated: 1 of 50]
-2018-04-11 21:35:14 <34f45684-3dd0-11e8-bf8a-7f961671b2de> DEBUG com.amazonaws.request:87 - Received successful response: 200, AWS Request ID: MT1EV3AV07T9OD0MJH9VBJSIB7VV4KQNSO5AEMVJF66Q9ASUAAJG
-2018-04-11 21:35:14 <34f45684-3dd0-11e8-bf8a-7f961671b2de> DEBUG com.amazonaws.requestId:136 - x-amzn-RequestId: MT1EV3AV07T9OD0MJH9VBJSIB7VV4KQNSO5AEMVJF66Q9ASUAAJG
-2018-04-11 21:35:14 <34f45684-3dd0-11e8-bf8a-7f961671b2de> INFO  com.serverless.dal.Task:107 - Tasks - get(): task - Task [id=6f1dfeb9-ea08-4161-8877-f6cc724b39e3, name=Task1, price=$9.990000]
-END RequestId: 34f45684-3dd0-11e8-bf8a-7f961671b2de
-REPORT RequestId: 34f45684-3dd0-11e8-bf8a-7f961671b2de	Duration: 5147.00 ms	Billed Duration: 5200 ms 	Memory Size: 1024 MB	Max Memory Used: 97 MB
-```
 
 ## View the Metrics
 
@@ -204,24 +141,24 @@ View the metrics for the service:
 $ serverless metrics
 
 Service wide metrics
-April 2, 2018 2:11 PM - April 3, 2018 2:11 PM
+April 4, 2019 8:49 PM - April 5, 2019 8:49 PM
 
-Invocations: 2
-Throttles: 0
-Errors: 0
-Duration (avg.): 331.23ms
+Invocations: 463 
+Throttles: 0 
+Errors: 3 
+Duration (avg.): 1971.14ms
 ```
 
 Or, view the metrics for only one function:
 
 ```
-$ serverless metrics --function hello
+$ serverless metrics --function updateTask
 
-hello
-April 2, 2018 2:13 PM - April 3, 2018 2:13 PM
+updateTask
+April 4, 2019 8:50 PM - April 5, 2019 8:50 PM
 
-Invocations: 2
-Throttles: 0
-Errors: 0
-Duration (avg.): 331.23ms
+Invocations: 24 
+Throttles: 0 
+Errors: 2 
+Duration (avg.): 249.71ms
 ```
