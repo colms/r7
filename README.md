@@ -132,6 +132,7 @@ curl -X PUT https://yh1vcbxakj.execute-api.us-east-1.amazonaws.com/dev/tasks -d 
 
 ```
 $ serverless logs --function getTask
+```
 
 ## View the Metrics
 
