@@ -29,14 +29,14 @@ public class DeleteTaskHandler implements RequestHandler<Map<String, Object>, Ap
         // send the response back
         if (success) {
           return ApiGatewayResponse.builder()
-      				.setStatusCode(204)
-      				.setHeaders(Collections.singletonMap("X-Powered-By", "AWS Lambda & Serverless"))
+              .setStatusCode(204)
+              .setHeaders(Collections.singletonMap("Access-Control-Allow-Origin", "*"))
       				.build();
         } else {
           return ApiGatewayResponse.builder()
       				.setStatusCode(404)
-      				.setObjectBody("Task with id: '" + taskId + "' not found.")
-      				.setHeaders(Collections.singletonMap("X-Powered-By", "AWS Lambda & Serverless"))
+              .setObjectBody("Task with id: '" + taskId + "' not found.")
+              .setHeaders(Collections.singletonMap("Access-Control-Allow-Origin", "*"))
       				.build();
         }
     } catch (Exception ex) {
@@ -47,7 +47,6 @@ public class DeleteTaskHandler implements RequestHandler<Map<String, Object>, Ap
   			return ApiGatewayResponse.builder()
   					.setStatusCode(500)
   					.setObjectBody(responseBody)
-  					.setHeaders(Collections.singletonMap("X-Powered-By", "AWS Lambda & Serverless"))
   					.build();
     }
 	}

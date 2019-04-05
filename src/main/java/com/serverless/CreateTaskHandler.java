@@ -23,18 +23,15 @@ public class CreateTaskHandler implements RequestHandler<Map<String, Object>, Ap
           JsonNode body = new ObjectMapper().readTree((String) input.get("body"));
 
 					// create the Task object for post
-					logger.info("Before making task");
 					Task task = new Task();
-					logger.info("Before setname");
 					task.setDescription(body.get("description").asText());
-					logger.info("Before making task");
           task.save(task);
 
           // send the response back
       		return ApiGatewayResponse.builder()
       				.setStatusCode(200)
-      				.setObjectBody(task)
-      				//.setHeaders(Collections.singletonMap("X-Powered-By", "AWS Lambda & Serverless"))
+							.setObjectBody(task)
+							.setHeaders(Collections.singletonMap("Access-Control-Allow-Origin", "*"))
       				.build();
 
       } catch (Exception ex) {
@@ -44,8 +41,8 @@ public class CreateTaskHandler implements RequestHandler<Map<String, Object>, Ap
     			Response responseBody = new Response("Error in saving task: ", input);
     			return ApiGatewayResponse.builder()
     					.setStatusCode(500)
-    					.setObjectBody(responseBody)
-    					//.setHeaders(Collections.singletonMap("X-Powered-By", "AWS Lambda & Serverless"))
+							.setObjectBody(responseBody)
+							.setHeaders(Collections.singletonMap("Access-Control-Allow-Origin", "*"))
     					.build();
       }
 	}

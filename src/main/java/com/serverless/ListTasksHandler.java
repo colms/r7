@@ -20,13 +20,13 @@ public class ListTasksHandler implements RequestHandler<Map<String, Object>, Api
 	public ApiGatewayResponse handleRequest(Map<String, Object> input, Context context) {
     try {
         // get all tasks
-        List<Task> tasks = new Task().list();
-
+		List<Task> tasks = new Task().list();
+		
         // send the response back
         return ApiGatewayResponse.builder()
     				.setStatusCode(200)
-    				.setObjectBody(tasks)
-    				.setHeaders(Collections.singletonMap("X-Powered-By", "AWS Lambda & Serverless"))
+					.setObjectBody(tasks)
+					.setHeaders(Collections.singletonMap("Access-Control-Allow-Origin", "*"))
     				.build();
     } catch (Exception ex) {
         logger.error("Error in listing tasks: " + ex);
@@ -35,8 +35,8 @@ public class ListTasksHandler implements RequestHandler<Map<String, Object>, Api
   			Response responseBody = new Response("Error in listing tasks: ", input);
   			return ApiGatewayResponse.builder()
   					.setStatusCode(500)
-  					.setObjectBody(responseBody)
-  					.setHeaders(Collections.singletonMap("X-Powered-By", "AWS Lambda & Serverless"))
+					.setObjectBody(responseBody)
+					.setHeaders(Collections.singletonMap("Access-Control-Allow-Origin", "*"))
   					.build();
     }
 	}

@@ -30,14 +30,14 @@ public class GetTaskHandler implements RequestHandler<Map<String, Object>, ApiGa
         if (task != null) {
           return ApiGatewayResponse.builder()
       				.setStatusCode(200)
-      				.setObjectBody(task)
-      				.setHeaders(Collections.singletonMap("X-Powered-By", "AWS Lambda & Serverless"))
+              .setObjectBody(task)
+              .setHeaders(Collections.singletonMap("Access-Control-Allow-Origin", "*"))
       				.build();
         } else {
           return ApiGatewayResponse.builder()
       				.setStatusCode(404)
               .setObjectBody("Task with id: '" + taskId + "' not found.")
-      				.setHeaders(Collections.singletonMap("X-Powered-By", "AWS Lambda & Serverless"))
+              .setHeaders(Collections.singletonMap("Access-Control-Allow-Origin", "*"))
       				.build();
         }
     } catch (Exception ex) {
@@ -48,7 +48,6 @@ public class GetTaskHandler implements RequestHandler<Map<String, Object>, ApiGa
   			return ApiGatewayResponse.builder()
   					.setStatusCode(500)
   					.setObjectBody(responseBody)
-  					.setHeaders(Collections.singletonMap("X-Powered-By", "AWS Lambda & Serverless"))
   					.build();
     }
 	}
