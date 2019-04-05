@@ -9,9 +9,9 @@ import org.apache.log4j.Logger;
 import java.util.Collections;
 import java.util.Map;
 
-import com.serverless.dal.Product;
+import com.serverless.dal.Task;
 
-public class CreateProductHandler implements RequestHandler<Map<String, Object>, ApiGatewayResponse> {
+public class CreateTaskHandler implements RequestHandler<Map<String, Object>, ApiGatewayResponse> {
 
 	private final Logger logger = Logger.getLogger(this.getClass());
 
@@ -22,29 +22,30 @@ public class CreateProductHandler implements RequestHandler<Map<String, Object>,
           // get the 'body' from input
           JsonNode body = new ObjectMapper().readTree((String) input.get("body"));
 
-          // create the Product object for post
-          Product product = new Product();
-          // product.setId(body.get("id").asText());
-          product.setName(body.get("name").asText());
-          product.setPrice((float) body.get("price").asDouble());
-          product.save(product);
+					// create the Task object for post
+					logger.info("Before making task");
+					Task task = new Task();
+					logger.info("Before setname");
+					task.setDescription(body.get("description").asText());
+					logger.info("Before making task");
+          task.save(task);
 
           // send the response back
       		return ApiGatewayResponse.builder()
       				.setStatusCode(200)
-      				.setObjectBody(product)
-      				.setHeaders(Collections.singletonMap("X-Powered-By", "AWS Lambda & Serverless"))
+      				.setObjectBody(task)
+      				//.setHeaders(Collections.singletonMap("X-Powered-By", "AWS Lambda & Serverless"))
       				.build();
 
       } catch (Exception ex) {
-          logger.error("Error in saving product: " + ex);
+          logger.error("Error in saving task: " + ex);
 
           // send the error response back
-    			Response responseBody = new Response("Error in saving product: ", input);
+    			Response responseBody = new Response("Error in saving task: ", input);
     			return ApiGatewayResponse.builder()
     					.setStatusCode(500)
     					.setObjectBody(responseBody)
-    					.setHeaders(Collections.singletonMap("X-Powered-By", "AWS Lambda & Serverless"))
+    					//.setHeaders(Collections.singletonMap("X-Powered-By", "AWS Lambda & Serverless"))
     					.build();
       }
 	}

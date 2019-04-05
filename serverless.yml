@@ -11,10 +11,10 @@
 #
 # Happy Coding!
 
-service: products-api
+service: tasks-api
 
 custom:
-  productsTableName: 'java-products-${self:provider.stage}'
+  tasksTableName: 'tasks-${self:provider.stage}'
 
 provider:
   name: aws
@@ -31,55 +31,54 @@ provider:
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
       Resource:
-        - { "Fn::GetAtt": ["ProductsDynamoDBTable", "Arn" ] }
+        - { "Fn::GetAtt": ["TasksDynamoDBTable", "Arn" ] }
   environment:
-    PRODUCTS_TABLE_NAME: ${self:custom.productsTableName}
+    TASKS_TABLE_NAME: ${self:custom.tasksTableName}
 
 package:
   artifact: 'target/${self:service}-${self:provider.stage}.jar'
 
 functions:
-  listProducts:
-    handler: com.serverless.ListProductsHandler
+  listTasks:
+    handler: com.serverless.ListTasksHandler
     events:
       - http:
-          path: /products
+          path: /tasks
           method: get
-  getProduct:
-    handler: com.serverless.GetProductHandler
+  getTask:
+    handler: com.serverless.GetTaskHandler
     events:
       - http:
-          path: /products/{id}
+          path: /tasks/{id}
           method: get
-  createProduct:
-    handler: com.serverless.CreateProductHandler
+  createTask:
+    handler: com.serverless.CreateTaskHandler
     events:
       - http:
-          path: /products
+          path: /tasks
           method: post
-  deleteProduct:
-    handler: com.serverless.DeleteProductHandler
+  deleteTask:
+    handler: com.serverless.DeleteTaskHandler
     events:
       - http:
-          path: /products/{id}
+          path: /tasks/{id}
           method: delete
 
 resources:
   Resources:
-    ProductsDynamoDBTable:
+    TasksDynamoDBTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:custom.productsTableName}
+        TableName: ${self:custom.tasksTableName}
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
-          - AttributeName: name
+          - AttributeName: description
             AttributeType: S
         KeySchema:
           - AttributeName: id
             KeyType: HASH
-          - AttributeName: name
+          - AttributeName: description
             KeyType: RANGE
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
+        BillingMode: PAY_PER_REQUEST
+

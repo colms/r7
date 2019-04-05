@@ -2,10 +2,10 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.serverless</groupId>
-  <artifactId>products-api</artifactId>
+  <artifactId>tasks-api</artifactId>
   <packaging>jar</packaging>
   <version>dev</version>
-  <name>products-api</name>
+  <name>tasks-api</name>
 
   <properties>
     <maven.compiler.source>1.8</maven.compiler.source>

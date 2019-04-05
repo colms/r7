@@ -10,29 +10,29 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.List;
 
-import com.serverless.dal.Product;
+import com.serverless.dal.Task;
 
-public class ListProductsHandler implements RequestHandler<Map<String, Object>, ApiGatewayResponse> {
+public class ListTasksHandler implements RequestHandler<Map<String, Object>, ApiGatewayResponse> {
 
 	private final Logger logger = Logger.getLogger(this.getClass());
 
 	@Override
 	public ApiGatewayResponse handleRequest(Map<String, Object> input, Context context) {
     try {
-        // get all products
-        List<Product> products = new Product().list();
+        // get all tasks
+        List<Task> tasks = new Task().list();
 
         // send the response back
         return ApiGatewayResponse.builder()
     				.setStatusCode(200)
-    				.setObjectBody(products)
+    				.setObjectBody(tasks)
     				.setHeaders(Collections.singletonMap("X-Powered-By", "AWS Lambda & Serverless"))
     				.build();
     } catch (Exception ex) {
-        logger.error("Error in listing products: " + ex);
+        logger.error("Error in listing tasks: " + ex);
 
         // send the error response back
-  			Response responseBody = new Response("Error in listing products: ", input);
+  			Response responseBody = new Response("Error in listing tasks: ", input);
   			return ApiGatewayResponse.builder()
   					.setStatusCode(500)
   					.setObjectBody(responseBody)
