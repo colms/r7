@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.log4j.Logger;
 import java.util.Collections;
 import java.util.Map;
+import java.util.HashMap;
 
 import com.serverless.dal.Task;
 
@@ -27,11 +28,16 @@ public class CreateTaskHandler implements RequestHandler<Map<String, Object>, Ap
 					task.setDescription(body.get("description").asText());
           task.save(task);
 
-          // send the response back
+					// send the response back
+					Map<String, String> headers  = new HashMap<String, String>() {{
+						put("Access-Control-Allow-Origin", "*");
+						put("Access-Control-Allow-Methods", "POST");
+						put("Access-Control-Allow-Headers", "Content-Type, Authorization, Content-Length, X-Requested-With, Accept");
+					}};
       		return ApiGatewayResponse.builder()
       				.setStatusCode(200)
 							.setObjectBody(task)
-							.setHeaders(Collections.singletonMap("Access-Control-Allow-Origin", "*"))
+							.setHeaders(headers)
       				.build();
 
       } catch (Exception ex) {

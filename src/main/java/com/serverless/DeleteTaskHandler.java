@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.log4j.Logger;
 import java.util.Collections;
 import java.util.Map;
+import java.util.HashMap;
 
 import com.serverless.dal.Task;
 
@@ -27,16 +28,21 @@ public class DeleteTaskHandler implements RequestHandler<Map<String, Object>, Ap
         Boolean success = new Task().delete(taskId);
 
         // send the response back
+        Map<String, String> headers  = new HashMap<String, String>() {{
+          put("Access-Control-Allow-Origin", "*");
+          put("Access-Control-Allow-Methods", "DELETE");
+          put("Access-Control-Allow-Headers", "Content-Type, Authorization, Content-Length, X-Requested-With, Accept");
+        }};
         if (success) {
           return ApiGatewayResponse.builder()
               .setStatusCode(204)
-              .setHeaders(Collections.singletonMap("Access-Control-Allow-Origin", "*"))
+              .setHeaders(headers)
       				.build();
         } else {
           return ApiGatewayResponse.builder()
       				.setStatusCode(404)
               .setObjectBody("Task with id: '" + taskId + "' not found.")
-              .setHeaders(Collections.singletonMap("Access-Control-Allow-Origin", "*"))
+              .setHeaders(headers)
       				.build();
         }
     } catch (Exception ex) {
